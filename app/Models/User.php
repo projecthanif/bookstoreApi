@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -18,6 +20,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'role',
         'email',
         'password',
     ];
@@ -44,4 +47,26 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function order():HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function wishLists():HasMany
+    {
+        return $this->hasMany(WishList::class);
+    }
+
+    public function reviews():HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function carts():HasMany
+    {
+        return $this->hasMany(Cart::class);
+    }
+
 }
+
