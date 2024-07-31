@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -49,22 +50,27 @@ class User extends Authenticatable
         ];
     }
 
-    public function order():HasMany
+    public function publisher(): HasOne
+    {
+        return $this->hasOne(Publisher::class);
+    }
+
+    public function order(): HasMany
     {
         return $this->hasMany(Order::class);
     }
 
-    public function wishLists():HasMany
+    public function wishLists(): HasMany
     {
         return $this->hasMany(WishList::class);
     }
 
-    public function reviews():HasMany
+    public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
     }
 
-    public function carts():HasMany
+    public function carts(): HasMany
     {
         return $this->hasMany(Cart::class);
     }

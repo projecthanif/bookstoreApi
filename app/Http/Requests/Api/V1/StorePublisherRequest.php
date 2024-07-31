@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Requests\V1;
+namespace App\Http\Requests\Api\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserRequest extends FormRequest
+class StorePublisherRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        $user = $this->user();
+        return $user !== null && $user->tokenCan('create');
     }
 
     /**
@@ -22,10 +23,9 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'nullable|string',
-            'email' => 'nullable|email',
-            'password' => 'nullable|string',
-            'role' => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'website' => 'required|string|url',
         ];
     }
 }

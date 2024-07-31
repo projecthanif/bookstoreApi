@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1;
+namespace App\Http\Requests\Api\V1;
 
+use App\Enum\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreUserRequest extends FormRequest
 {
@@ -24,8 +26,8 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => "required|string",
             "email" => "required|string|email",
-            "role" => "nullable|string",
-            "password" => "string|min:6"
+            "role" => ["required",Rule::in(UserRole::allRole())],
+            "password" => "required|string|min:6"
         ];
     }
 }

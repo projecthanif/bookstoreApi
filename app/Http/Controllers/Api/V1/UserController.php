@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enum\UserRole;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\StoreUserRequest;
-use App\Http\Requests\V1\UpdateUserRequest;
+use App\Http\Requests\Api\V1\StoreUserRequest;
+use App\Http\Requests\Api\V1\UpdateUserRequest;
 use App\Http\Resources\V1\UserCollection;
 use App\Http\Resources\V1\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Route;
-use Laravel\Sanctum\Sanctum;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -59,7 +58,7 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        return User::find($id)->delete();
+        return User::find($id)?->delete();
     }
 
     /**
@@ -70,16 +69,32 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $data = $request->validate([
-            'email' => 'string',
-            'password' => 'string'
+            'email' => 'email',
+            'password' => 'string',
         ]);
+
         $attempt = Auth::attempt($data);
 
-        if($attempt) {
+        if ($attempt) {
             $user = Auth::user();
-            $token  = $user->createToken('user_token');
+            $token = '';
+            if ($user === null) {
+                return new JsonResponse($user);
+            }
+
+            $token = match ($user->role) {
+                UserRole::User->value => $user->createToken('user_token', ['user:update']),
+                UserRole::ADMIN->value => $user->createToken('admin_token'),
+                UserRole::Publisher->value => $user->createToken('publisher_token', [
+                    'user:*',
+                    'publisher:create',
+                    'publisher:update',
+                    'publisher:delete',
+                ]),
+            };
+
             return new JsonResponse([
-                'token' => $token->plainTextToken
+                'token' => $token?->plainTextToken
             ]);
         }
 
