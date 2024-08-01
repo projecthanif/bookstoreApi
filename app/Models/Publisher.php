@@ -24,7 +24,7 @@ class Publisher extends Model
         return $this->hasMany(Book::class);
     }
 
-    public function user(): BelongsTo
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
     }

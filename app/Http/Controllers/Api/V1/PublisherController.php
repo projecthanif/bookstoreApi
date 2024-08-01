@@ -67,6 +67,6 @@ class PublisherController extends Controller
      */
     public function destroy(string $id)
     {
-        dd(Publisher::find($id)->delete());
+//        Publisher::find($id)->delete();
     }
 }

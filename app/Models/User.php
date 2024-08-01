@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->hasOne(Publisher::class);
     }
 
+    public function author(): HasOne
+    {
+        return $this->hasOne(Author::class);
+    }
+
     public function order(): HasMany
     {
         return $this->hasMany(Order::class);

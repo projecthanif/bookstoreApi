@@ -4,15 +4,14 @@ namespace App\Http\Requests\Api\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePublisherRequest extends FormRequest
+class UpdateAuthorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        $user = $this->user();
-        return $user !== null && $user->publisher?->id === null;
+        return false;
     }
 
     /**
@@ -23,9 +22,7 @@ class StorePublisherRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'website' => 'required|string|url',
+            //
         ];
     }
 }

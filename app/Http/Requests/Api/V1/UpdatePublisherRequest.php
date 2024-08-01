@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Enum\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 
@@ -13,7 +14,17 @@ class UpdatePublisherRequest extends FormRequest
     public function authorize(): bool
     {
         $user = $this->user();
-        return $user !== null && $user->tokenCan('publisher:update');
+        if ($user?->role === UserRole::ADMIN->value) {
+            return $user !== null;
+        }
+
+        $arr = request()->segments();
+        $check = $user?->publisher?->id === (int) $arr[3];
+
+        if ($check) {
+            return $user !== null && $user->tokenCan('publisher:update');
+        }
+        return false;
     }
 
     /**

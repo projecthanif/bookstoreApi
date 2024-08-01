@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePublisherRequest extends FormRequest
+class StoreAuthorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -12,7 +12,8 @@ class StorePublisherRequest extends FormRequest
     public function authorize(): bool
     {
         $user = $this->user();
-        return $user !== null && $user->publisher?->id === null;
+
+        return $user !== null && $user->author->id === null;
     }
 
     /**
@@ -23,9 +24,7 @@ class StorePublisherRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'website' => 'required|string|url',
+            //
         ];
     }
 }
