@@ -10,7 +10,6 @@ use App\Http\Resources\V1\PublisherCollection;
 use App\Http\Resources\V1\PublisherResource;
 use App\Models\Publisher;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PublisherController extends Controller
@@ -29,17 +28,27 @@ class PublisherController extends Controller
      */
     public function store(StorePublisherRequest $request)
     {
+        $user = auth()->user();
         $data = $request->validated();
-        DB::transaction(static function () use ($data) {
-            $data['user_id'] = auth()->user()->id;
 
-            $user = auth()->user()->update([
+        $check = $user?->author?->id === null;
+        if (!$check || $user === null) {
+            return new JsonResponse([
+                'message' => 'already a publisher!!'
+            ]);
+        }
+
+        $return = DB::transaction(static function () use ($data, $user) {
+            $data['user_id'] = $user->id;
+
+            $user->update([
                 'role' => UserRole::Publisher->value
             ]);
 
-            return new PublisherResource(Publisher::create($data));
+            return Publisher::create($data);
         });
 
+        return new PublisherResource($return);
     }
 
     /**
