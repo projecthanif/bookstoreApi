@@ -5,6 +5,7 @@ namespace App\Http\Requests\Api\V1;
 use App\Enum\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -19,7 +20,7 @@ class UpdateUserRequest extends FormRequest
         }
 
         $arr = request()->segments();
-        $check = $user->id === (int) $arr[3];
+        $check = $user->id === (int)$arr[3];
 
         if ($check) {
             return $user !== null && $user->tokenCan('user:update');
@@ -40,14 +41,14 @@ class UpdateUserRequest extends FormRequest
                 'name' => 'required|string',
                 'email' => 'required|email',
                 'password' => 'required|string',
-                'role' => 'required|string',
+//                'role' => ['required', 'string', Rule::in(UserRole::allRole())],
             ];
         }
         return [
             'name' => 'sometimes|required|string',
             'email' => 'sometimes|required|email',
             'password' => 'sometimes|required|string',
-            'role' => 'sometimes|required|string',
+//            'role' => ['sometimes', 'required', 'string', Rule::in(UserRole::allRole())],
         ];
     }
 }

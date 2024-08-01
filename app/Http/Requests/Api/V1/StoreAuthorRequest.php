@@ -13,7 +13,7 @@ class StoreAuthorRequest extends FormRequest
     {
         $user = $this->user();
 
-        return $user !== null && $user->author->id === null;
+        return $user !== null;
     }
 
     /**
@@ -24,7 +24,9 @@ class StoreAuthorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:100',
+            'biography' => 'required|string',
+            'dob' => 'required|date'
         ];
     }
 }

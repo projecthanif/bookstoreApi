@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enum\UserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\StoreAuthorRequest;
+use App\Http\Resources\V1\AuthorCollection;
+use App\Http\Resources\V1\AuthorResource;
+use App\Models\Author;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AuthorController extends Controller
 {
@@ -12,23 +18,31 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return new AuthorCollection(Author::all());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreAuthorRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+        $user = auth()->user();
+        $check = $user->author?->id === null;
+//        if (!$check || $user === null) {
+//            return new JsonResponse([
+//                'message' => 'already an author!!'
+//            ]);
+//        }
+
+        DB::transaction(static function () use ($validatedData, $user) {
+            $user->update([
+                'role' => UserRole::Author->value
+            ]);
+            $validatedData['user_id'] = $user->id;
+            return new AuthorResource(Author::create($validatedData));
+        });
+
     }
 
     /**

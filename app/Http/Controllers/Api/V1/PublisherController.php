@@ -40,7 +40,6 @@ class PublisherController extends Controller
             return new PublisherResource(Publisher::create($data));
         });
 
-//        return new PublisherResource($publisher);
     }
 
     /**

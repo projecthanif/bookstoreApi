@@ -13,7 +13,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -31,8 +30,8 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): UserResource
     {
-        $request['password'] = Hash::make($request->password);
         $data = $request->validated();
+        $data['role'] = UserRole::User->value;
         return new UserResource(User::create($data));
     }
 
@@ -90,6 +89,12 @@ class UserController extends Controller
                     'publisher:create',
                     'publisher:update',
                     'publisher:delete',
+                ]),
+                UserRole::Author->value => $user->createToken('author_token', [
+                    'user:*',
+                    'author:create',
+                    'author:update',
+                    'author:delete',
                 ]),
             };
 
