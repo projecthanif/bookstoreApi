@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('authors', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('name');
             $table->longText('biography')->nullable();
             $table->date('dob')->nullable();
