@@ -13,7 +13,7 @@ class StoreAuthorRequest extends FormRequest
     {
         $user = $this->user();
 
-        return $user !== null;
+        return $user !== null && $user->author?->id === null;
     }
 
     /**

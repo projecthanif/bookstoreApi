@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Api\V1;
 use App\Enum\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\StoreAuthorRequest;
+use App\Http\Requests\Api\V1\UpdateAuthorRequest;
 use App\Http\Resources\V1\AuthorCollection;
 use App\Http\Resources\V1\AuthorResource;
 use App\Models\Author;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AuthorController extends Controller
@@ -17,7 +17,7 @@ class AuthorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index():AuthorCollection
     {
         return new AuthorCollection(Author::all());
     }
@@ -25,7 +25,7 @@ class AuthorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAuthorRequest $request)
+    public function store(StoreAuthorRequest $request): AuthorResource|JsonResponse
     {
         $validatedData = $request->validated();
         $user = auth()->user();
@@ -59,26 +59,11 @@ class AuthorController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateAuthorRequest $request, Author $author)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $author->update($request->validated());
+        return new AuthorResource($author);
     }
 }
