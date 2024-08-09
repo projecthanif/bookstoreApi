@@ -15,12 +15,12 @@ class CartItem extends Model
         'book_id',
     ];
 
-    public function book():BelongsTo
+    public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class);
     }
 
-    public function cart():BelongsTo
+    public function cart(): BelongsTo
     {
         return $this->belongsTo(Cart::class);
     }

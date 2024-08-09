@@ -20,7 +20,7 @@ class BookFactory extends Factory
         return [
             'title' => $this->faker->title,
             'description' => $this->faker->sentence(),
-            'isbn' =>  $this->faker->isbn13(),
+            'isbn' => $this->faker->isbn13(),
             'publication_date' => $this->faker->dateTimeThisDecade(),
             'price' => $this->faker->randomFloat(2, 10, 100),
             'currency' => $this->faker->currencyCode(),

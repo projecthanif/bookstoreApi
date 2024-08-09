@@ -12,11 +12,9 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      */
@@ -32,6 +30,7 @@ class UserController extends Controller
     {
         $data = $request->validated();
         $data['role'] = UserRole::User->value;
+
         return new UserResource(User::create($data));
     }
 
@@ -49,6 +48,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, string $id): UserResource
     {
         User::find($id)->update($request->validated());
+
         return new UserResource(User::find($id));
     }
 
@@ -62,9 +62,9 @@ class UserController extends Controller
 
     /**
      * Login User
+     *
      * @throws \JsonException
      */
-
     public function login(Request $request)
     {
         $data = $request->validate([
@@ -99,11 +99,10 @@ class UserController extends Controller
             };
 
             return new JsonResponse([
-                'token' => $token?->plainTextToken
+                'token' => $token?->plainTextToken,
             ]);
         }
 
         return new JsonResponse($attempt);
     }
-
 }

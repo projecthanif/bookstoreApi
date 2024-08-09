@@ -19,7 +19,7 @@ class AuthorFactory extends Factory
         return [
             'name' => $this->faker->name,
             'biography' => $this->faker->randomHtml(),
-            'dob' => $this->faker->dateTimeThisDecade()
+            'dob' => $this->faker->dateTimeThisDecade(),
         ];
     }
 }

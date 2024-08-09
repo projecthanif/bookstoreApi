@@ -20,7 +20,7 @@ class PaymentFactory extends Factory
         return [
             'order_id' => Order::factory(),
             'amount' => $this->faker->randomFloat(2, 0, 999999),
-            'payment_method' => $this->faker->randomElement(['credit_card','cash']),
+            'payment_method' => $this->faker->randomElement(['credit_card', 'cash']),
         ];
     }
 }

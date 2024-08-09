@@ -24,6 +24,7 @@ class UpdatePublisherRequest extends FormRequest
         if ($check) {
             return $user !== null && $user->tokenCan('publisher:update');
         }
+
         return false;
     }
 
@@ -48,5 +49,4 @@ class UpdatePublisherRequest extends FormRequest
             'website' => 'sometimes|string|max:255',
         ];
     }
-
 }

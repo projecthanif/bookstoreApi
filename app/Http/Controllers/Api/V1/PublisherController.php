@@ -22,7 +22,6 @@ class PublisherController extends Controller
         return new PublisherCollection(Publisher::all());
     }
 
-
     /**
      * Store a newly created resource in storage.
      */
@@ -32,9 +31,9 @@ class PublisherController extends Controller
         $data = $request->validated();
 
         $check = $user?->author?->id === null;
-        if (!$check || $user === null) {
+        if (! $check || $user === null) {
             return new JsonResponse([
-                'message' => 'already a publisher!!'
+                'message' => 'already a publisher!!',
             ]);
         }
 
@@ -42,7 +41,7 @@ class PublisherController extends Controller
             $data['user_id'] = $user->id;
 
             $user->update([
-                'role' => UserRole::Publisher->value
+                'role' => UserRole::Publisher->value,
             ]);
 
             return Publisher::create($data);
@@ -59,7 +58,6 @@ class PublisherController extends Controller
         return new PublisherResource($publisher);
     }
 
-
     /**
      * Update the specified resource in storage.
      */
@@ -67,6 +65,7 @@ class PublisherController extends Controller
     {
         $data = $request->validated();
         $update = $publisher->update($data);
+
         return new PublisherResource($publisher);
     }
 
@@ -75,6 +74,6 @@ class PublisherController extends Controller
      */
     public function destroy(string $id)
     {
-//        Publisher::find($id)->delete();
+        //        Publisher::find($id)->delete();
     }
 }

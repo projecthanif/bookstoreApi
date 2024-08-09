@@ -22,7 +22,7 @@ class ReviewFactory extends Factory
             'book_id' => Book::factory(),
             'user_id' => User::factory(),
             'rating' => $this->faker->numberBetween(1, 5),
-            'review_text' => $this->faker->paragraph
+            'review_text' => $this->faker->paragraph,
         ];
     }
 }

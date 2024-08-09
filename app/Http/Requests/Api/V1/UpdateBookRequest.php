@@ -39,7 +39,7 @@ class UpdateBookRequest extends FormRequest
         return [
             'publicationDate' => 'publication_date',
             'publisherId' => 'publisher_id',
-            'genreId' => 'genre_id'
+            'genreId' => 'genre_id',
         ];
     }
 }

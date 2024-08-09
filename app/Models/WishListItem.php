@@ -15,14 +15,13 @@ class WishListItem extends Model
         'book_id',
     ];
 
-    public function wishlist():BelongsTo
+    public function wishlist(): BelongsTo
     {
         return $this->belongsTo(WishList::class);
     }
 
-    public function book():BelongsTo
+    public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class);
     }
-
 }

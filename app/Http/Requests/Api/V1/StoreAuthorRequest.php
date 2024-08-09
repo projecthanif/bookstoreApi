@@ -26,7 +26,7 @@ class StoreAuthorRequest extends FormRequest
         return [
             'name' => 'required|string|max:100',
             'biography' => 'required|string',
-            'dob' => 'required|date'
+            'dob' => 'required|date',
         ];
     }
 }

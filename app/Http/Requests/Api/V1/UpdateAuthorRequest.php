@@ -16,7 +16,7 @@ class UpdateAuthorRequest extends FormRequest
         $segments = request()->segments();
         $id = $segments[3];
 
-        $check = ($user->author->id === (int)$id);
+        $check = ($user->author->id === (int) $id);
 
         return $user !== null && $check === true;
     }
@@ -32,14 +32,14 @@ class UpdateAuthorRequest extends FormRequest
             return [
                 'name' => 'required|string|max:100',
                 'biography' => 'required|string',
-                'dob' => 'required|date'
+                'dob' => 'required|date',
             ];
         }
 
         return [
             'name' => 'sometimes|required|string|max:100',
             'biography' => 'sometimes|required|string',
-            'dob' => 'sometimes|required|date'
+            'dob' => 'sometimes|required|date',
         ];
     }
 }

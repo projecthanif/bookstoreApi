@@ -2,15 +2,17 @@
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use function Pest\Laravel\{actingAs, get, post, delete, put, patch};
 
+use function Pest\Laravel\delete;
+use function Pest\Laravel\patch;
+use function Pest\Laravel\post;
 
-$uri = "api/v1/user";
+$uri = 'api/v1/user';
 it('can create new user', function () use ($uri) {
 
     $name = fake()->name();
     $email = fake()->email();
-    $role = "superadmin";
+    $role = 'superadmin';
     $count = \App\Models\User::count();
 
     $user = post($uri, [
@@ -22,12 +24,10 @@ it('can create new user', function () use ($uri) {
         'remember_token' => Str::random(10),
     ]);
 
-
     expect($email)->toBe($user['data']['email'])
         ->and($count + 1)
         ->toBe(\App\Models\User::count());
 });
-
 
 it('can delete user from db', function () use ($uri) {
     $count = \App\Models\User::count();
@@ -41,17 +41,17 @@ it('can delete user from db', function () use ($uri) {
         ->toBe(\App\Models\User::count());
 });
 
-it("can update user", function () use ($uri) {
+it('can update user', function () use ($uri) {
     $email = fake()->email();
     $user = \App\Models\User::all();
 
     if ($user->first() === null) {
-//        expect()->dd('no user found to update');
-//        expect()->
-    }else {
+        //        expect()->dd('no user found to update');
+        //        expect()->
+    } else {
         $user = $user->random(1);
         $res = patch("{$uri}/{$user->first()->id}", [
-            'email' => $email
+            'email' => $email,
         ]);
         expect($user->first()->email)->not->toBe($res['data']['email']);
     }
@@ -64,25 +64,25 @@ test('can user login ?', function () use ($uri) {
         'name' => 'projecthanif',
         'email' => $email,
         'password' => 'password',
-        'role' => 'superadmin'
+        'role' => 'superadmin',
     ];
 
-    $user = post((string)$uri, $user);
+    $user = post((string) $uri, $user);
 
     expect($email)->toBe($user['data']['email']);
 
     $res = post('/login', [
         'email' => $email,
-        'password' => 'password'
+        'password' => 'password',
     ]);
 
     $fromDb = toGetUserTokenForTest($user['data']['id']);
     expect($res['token'])->toBe($fromDb);
 });
 
-
-function toGetUserTokenForTest(int $userId){
+function toGetUserTokenForTest(int $userId)
+{
     return \Illuminate\Support\Facades\DB::table('personal_access_tokens')->where([
-        'tokenable_id' => $userId
+        'tokenable_id' => $userId,
     ])->select('token');
 }

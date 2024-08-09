@@ -12,15 +12,15 @@ class WishList extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id'
+        'user_id',
     ];
 
-    public function user():BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function book():BelongsToMany
+    public function book(): BelongsToMany
     {
         return $this->belongsToMany(Book::class, 'wish_list_items', 'wishlist_id', 'book_id');
     }

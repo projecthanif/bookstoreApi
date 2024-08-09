@@ -2,7 +2,7 @@
 
 namespace App\Enum;
 
-enum UserRole:string
+enum UserRole: string
 {
     case ADMIN = 'admin';
 
@@ -13,8 +13,8 @@ enum UserRole:string
 
     case Author = 'author';
 
-
-    public static function allRole() :array {
+    public static function allRole(): array
+    {
         return [
             self::User,
             self::ADMIN,

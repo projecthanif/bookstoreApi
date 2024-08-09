@@ -17,7 +17,7 @@ class AuthorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index():AuthorCollection
+    public function index(): AuthorCollection
     {
         return new AuthorCollection(Author::all());
     }
@@ -31,15 +31,15 @@ class AuthorController extends Controller
         $user = auth()->user();
 
         $check = $user?->author?->id === null;
-        if (!$check || $user === null) {
+        if (! $check) {
             return new JsonResponse([
-                'message' => 'already an author!!'
+                'message' => 'already an author!!',
             ]);
         }
 
         $return = DB::transaction(static function () use ($validatedData, $user) {
             $user->update([
-                'role' => UserRole::Author->value
+                'role' => UserRole::Author->value,
             ]);
             $validatedData['user_id'] = $user->id;
 
@@ -64,6 +64,7 @@ class AuthorController extends Controller
     public function update(UpdateAuthorRequest $request, Author $author)
     {
         $author->update($request->validated());
+
         return new AuthorResource($author);
     }
 }

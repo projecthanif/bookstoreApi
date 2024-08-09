@@ -12,7 +12,7 @@ class BookAuthor extends Model
 
     protected $fillable = [
         'book_id',
-        'author_id'
+        'author_id',
     ];
 
     public function book(): BelongsTo

@@ -16,15 +16,16 @@ class UpdateUserRequest extends FormRequest
     {
         $user = $this->user();
         if ($user?->role === UserRole::ADMIN->value) {
-            return $user !== null && $user->tokenCan('user:update');;
+            return $user !== null && $user->tokenCan('user:update');
         }
 
         $arr = request()->segments();
-        $check = $user->id === (int)$arr[3];
+        $check = $user->id === (int) $arr[3];
 
         if ($check) {
             return $user !== null && $user->tokenCan('user:update');
         }
+
         return false;
 
     }
@@ -41,14 +42,15 @@ class UpdateUserRequest extends FormRequest
                 'name' => 'required|string',
                 'email' => 'required|email',
                 'password' => 'required|string',
-//                'role' => ['required', 'string', Rule::in(UserRole::allRole())],
+                //                'role' => ['required', 'string', Rule::in(UserRole::allRole())],
             ];
         }
+
         return [
             'name' => 'sometimes|required|string',
             'email' => 'sometimes|required|email',
             'password' => 'sometimes|required|string',
-//            'role' => ['sometimes', 'required', 'string', Rule::in(UserRole::allRole())],
+            //            'role' => ['sometimes', 'required', 'string', Rule::in(UserRole::allRole())],
         ];
     }
 }

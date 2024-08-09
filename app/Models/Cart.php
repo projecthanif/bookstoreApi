@@ -15,13 +15,12 @@ class Cart extends Model
         'user_id',
     ];
 
-
-    public function user():BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function book():BelongsToMany
+    public function book(): BelongsToMany
     {
         return $this->belongsToMany(Book::class, 'cart_items', 'cart_id', 'book_id');
     }

@@ -24,7 +24,6 @@ class Book extends Model
         'genre_id',
     ];
 
-
     public function genre(): BelongsTo
     {
         return $this->belongsTo(Genre::class);
@@ -45,19 +44,18 @@ class Book extends Model
         return $this->belongsToMany(Order::class, 'order_items', 'book_id', 'order_id');
     }
 
-    public function reviews():HasMany
+    public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
     }
 
-    public function cart():BelongsToMany
+    public function cart(): BelongsToMany
     {
         return $this->belongsToMany(Cart::class, 'cart_items', 'book_id', 'cart_id');
     }
 
-    public function wishList():BelongsToMany
+    public function wishList(): BelongsToMany
     {
         return $this->belongsToMany(WishList::class, 'wish_list_items', 'book_id', 'wishlist_id');
     }
 }
-
