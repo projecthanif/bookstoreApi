@@ -16,14 +16,14 @@ class UpdateUserRequest extends FormRequest
     {
         $user = $this->user();
         if ($user?->role === UserRole::ADMIN->value) {
-            return $user !== null && $user->tokenCan('user:update');
+            return $user !== null;
         }
 
         $arr = request()->segments();
         $check = $user->id === (int) $arr[3];
 
         if ($check) {
-            return $user !== null && $user->tokenCan('user:update');
+            return $user !== null;
         }
 
         return false;

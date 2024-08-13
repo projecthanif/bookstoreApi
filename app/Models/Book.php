@@ -20,7 +20,7 @@ class Book extends Model
         'price',
         'currency',
         'quantity',
-        'publisher_id',
+        'author',
         'genre_id',
     ];
 
@@ -29,9 +29,9 @@ class Book extends Model
         return $this->belongsTo(Genre::class);
     }
 
-    public function publisher(): BelongsTo
+    public function publisher(): BelongsToMany
     {
-        return $this->belongsTo(Publisher::class);
+        return $this->belongsToMany(Publisher::class, 'book_publishers', 'book_id', 'publisher_id');
     }
 
     public function authors(): BelongsToMany

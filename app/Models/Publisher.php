@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Publisher extends Model
@@ -17,9 +18,9 @@ class Publisher extends Model
         'user_id',
     ];
 
-    public function book(): HasMany
+    public function book(): BelongsToMany
     {
-        return $this->hasMany(Book::class);
+        return $this->belongsToMany(Book::class, 'book_publishers', 'publisher_id', 'book_id');
     }
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

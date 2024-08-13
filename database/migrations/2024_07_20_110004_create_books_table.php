@@ -20,7 +20,7 @@ return new class extends Migration
             $table->double('price');
             $table->string('currency');
             $table->unsignedInteger('quantity');
-            $table->foreignId('publisher_id')->constrained('publishers')->cascadeOnDelete();
+            $table->string('author');
             $table->foreignId('genre_id')->constrained('genres')->cascadeOnDelete();
             $table->timestamps();
         });
