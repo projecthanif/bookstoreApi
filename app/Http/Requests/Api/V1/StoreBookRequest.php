@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Requests\Api\V1;
-
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreBookRequest extends FormRequest
@@ -25,21 +24,20 @@ class StoreBookRequest extends FormRequest
             'title' => 'required|string|max:255|min:5',
             'description' => 'required|string',
             'isbn' => 'required|string',
-            'publicationDate' => 'required|date',
+            'publication_date' => 'required|date',
             'price' => 'required|int',
             'currency' => 'required|string',
+            'author' => 'required|string',
             'quantity' => 'required|int',
-            'publisherId' => 'required|string',
-            'genreId' => 'required|string',
+            'genre_id' => 'required|string',
         ];
     }
 
-    public function prepareForValidation()
+    protected function prepareForValidation(): void
     {
-        return [
-            'publicationDate' => 'publication_date',
-            'publisherId' => 'publisher_id',
-            'genreId' => 'genre_id',
-        ];
+        $this->merge([
+            'publication_date' => $this->publicationDate,
+            'genre_id' => $this->genreId,
+        ]);
     }
 }

@@ -5,6 +5,10 @@ namespace App\Http\Resources\V1;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property mixed $id
+ * @property mixed $description
+ */
 class GenreResource extends JsonResource
 {
     /**
@@ -15,8 +19,9 @@ class GenreResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-          'name' => $this->name,
-          'description' => $this->description,
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
         ];
     }
 }

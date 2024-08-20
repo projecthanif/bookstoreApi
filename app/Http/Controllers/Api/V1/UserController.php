@@ -72,6 +72,7 @@ class UserController extends Controller
             'password' => 'string',
         ]);
 
+
         $attempt = Auth::attempt($data);
 
         if ($attempt) {

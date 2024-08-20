@@ -9,6 +9,7 @@ use App\Http\Resources\V1\BookCollection;
 use App\Http\Resources\V1\GenreCollection;
 use App\Http\Resources\V1\GenreResource;
 use App\Models\Genre;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -27,9 +28,7 @@ class GenreController extends Controller
      */
     public function books(Genre $genre)
     {
-        dd($genre->book());
-
-//        return new BookCollection($genre->book());
+        return new GenreCollection($genre->book());
     }
 
 
@@ -66,12 +65,4 @@ class GenreController extends Controller
         $genre->update($data);
         return new GenreResource($genre);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-//    public function destroy(string $id)
-//    {
-//        //
-//    }
 }
