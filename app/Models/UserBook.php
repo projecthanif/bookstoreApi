@@ -6,22 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class BookAuthor extends Model
+class UserBook extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'book_id',
-        'author_id',
+        'user_id'
     ];
 
-    public function book(): BelongsTo
-    {
-        return $this->belongsTo(Book::class, 'book_id');
-    }
 
-    public function author(): BelongsTo
+    public function user():BelongsTo
     {
-        return $this->belongsTo(Author::class, 'author_id', "id");
+        return $this->belongsTo(User::class);
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Book extends Model
 {
@@ -29,24 +30,24 @@ class Book extends Model
         return $this->belongsTo(Genre::class);
     }
 
-    public function publisher(): BelongsToMany
-    {
-        return $this->belongsToMany(Publisher::class, 'book_publishers', 'book_id', 'publisher_id');
-    }
-
-    public function authors(): BelongsToMany
+    public function user(): BelongsToMany
     {
         return $this->belongsToMany(
-            Author::class,
-            'book_authors',
+            User::class,
+            'user_books',
             'book_id',
-            'author_id'
+            'user_id'
         );
     }
 
     public function order(): BelongsToMany
     {
-        return $this->belongsToMany(Order::class, 'order_items', 'book_id', 'order_id');
+        return $this->belongsToMany(
+            Order::class,
+            'order_items',
+            'book_id',
+            'order_id'
+        );
     }
 
     public function reviews(): HasMany
@@ -54,9 +55,9 @@ class Book extends Model
         return $this->hasMany(Review::class);
     }
 
-    public function cart(): BelongsToMany
+    public function cart(): HasMany
     {
-        return $this->belongsToMany(Cart::class, 'cart_items', 'book_id', 'cart_id');
+        return $this->hasMany(Cart::class);
     }
 
     public function wishList(): BelongsToMany

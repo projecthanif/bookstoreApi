@@ -18,11 +18,6 @@ class Publisher extends Model
         'user_id',
     ];
 
-    public function book(): BelongsToMany
-    {
-        return $this->belongsToMany(Book::class, 'book_publishers', 'publisher_id', 'book_id');
-    }
-
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Models\UserBook;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateBookRequest extends FormRequest
@@ -11,7 +12,12 @@ class UpdateBookRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        $user = auth()->user();
+        $url = url()->current();
+        $array = explode('/', $url);
+        $urlArr = end($array);
+        $userBookId = UserBook::find($urlArr)?->user_id ?? '';
+        return $userBookId === $user?->id;
     }
 
     /**
@@ -21,25 +27,35 @@ class UpdateBookRequest extends FormRequest
      */
     public function rules(): array
     {
+        if($this->method() === 'PUT') {
+            return [
+                'title' => 'required|string|max:255|min:5',
+                'description' => 'required|string',
+                'isbn' => 'required|string',
+                'publication_date' => 'required|date',
+                'price' => 'required|int',
+                'currency' => 'required|string',
+                'quantity' => 'required|int',
+                'genre_id' => 'required|string',
+            ];
+        }
         return [
-            'title' => 'required|string|max:255|min:5',
-            'description' => 'required|string',
-            'isbn' => 'required|string',
-            'publicationDate' => 'required|date',
-            'price' => 'required|number',
-            'currency' => 'required|string',
-            'quantity' => 'required|number',
-            'publisherId' => 'required|string',
-            'genreId' => 'required|string',
+            'title' => 'sometimes|required|string|max:255|min:5',
+            'description' => 'sometimes|required|string',
+            'isbn' => 'sometimes|required|string',
+            'publication_date' => 'sometimes|required|date',
+            'price' => 'sometimes|required|int',
+            'currency' => 'sometimes|required|string',
+            'quantity' => 'sometimes|required|int',
+            'genre_id' => 'sometimes|required|string',
         ];
     }
 
-    public function prepareForValidation()
+    protected function prepareForValidation()
     {
-        return [
-            'publicationDate' => 'publication_date',
-            'publisherId' => 'publisher_id',
-            'genreId' => 'genre_id',
-        ];
+        $this->merge([
+            'publication_date' => $this->publicationDate,
+            'genre_id' => $this->genreId,
+        ]);
     }
 }

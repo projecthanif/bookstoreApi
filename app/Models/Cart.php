@@ -13,6 +13,7 @@ class Cart extends Model
 
     protected $fillable = [
         'user_id',
+        'book_id'
     ];
 
     public function user(): BelongsTo
@@ -20,8 +21,8 @@ class Cart extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function book(): BelongsToMany
+    public function book(): BelongsTo
     {
-        return $this->belongsToMany(Book::class, 'cart_items', 'cart_id', 'book_id');
+        return $this->belongsTo(Book::class);
     }
 }
