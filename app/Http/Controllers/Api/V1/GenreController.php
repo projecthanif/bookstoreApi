@@ -8,6 +8,7 @@ use App\Http\Requests\Api\V1\UpdateGenreRequest;
 use App\Http\Resources\V1\BookCollection;
 use App\Http\Resources\V1\GenreCollection;
 use App\Http\Resources\V1\GenreResource;
+use App\Models\Book;
 use App\Models\Genre;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,9 +27,9 @@ class GenreController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function books(Genre $genre)
+    public function books(Genre $genre, $id)
     {
-        return new GenreCollection($genre->book());
+        return new BookCollection($genre::find($id)?->book);
     }
 
 

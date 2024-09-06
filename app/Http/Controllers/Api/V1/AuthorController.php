@@ -8,7 +8,9 @@ use App\Http\Requests\Api\V1\StoreAuthorRequest;
 use App\Http\Requests\Api\V1\UpdateAuthorRequest;
 use App\Http\Resources\V1\AuthorCollection;
 use App\Http\Resources\V1\AuthorResource;
+use App\Http\Resources\V1\BookCollection;
 use App\Models\Author;
+use App\Models\Book;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -31,7 +33,7 @@ class AuthorController extends Controller
         $user = auth()->user();
 
         $check = $user?->author?->id === null;
-        if (! $check) {
+        if (!$check) {
             return new JsonResponse([
                 'message' => 'already an author!!',
             ]);
@@ -66,5 +68,11 @@ class AuthorController extends Controller
         $author->update($request->validated());
 
         return new AuthorResource($author);
+    }
+
+    public function books($name): BookCollection
+    {
+        $books = Book::where(['author' => $name])->get();
+        return new BookCollection($books);
     }
 }

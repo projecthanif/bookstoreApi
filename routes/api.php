@@ -6,20 +6,24 @@ use App\Http\Controllers\Api\V1\PublisherController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\GenreController;
 use App\Http\Controllers\Api\V1\CartController;
+use App\Http\Controllers\Api\V1\WishListController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
 
     Route::post('/login', [UserController::class, 'login']);
-    Route::middleware(['auth:sanctum'])->controller('App\Http\Controllers\Api\V1')->group(function () {
+    Route::post('user', [UserController::class, 'store']);
+    Route::middleware(['auth:sanctum'])->group(function () {
         Route::apiResource('user', UserController::class)->except('post');
         Route::apiResource('publisher', PublisherController::class);
         Route::apiResource('author', AuthorController::class);
+        Route::get('/author/{name}/books', [AuthorController::class, 'books']);
         Route::apiResource('book', BookController::class);
+        Route::get('/genre/{id}/books', [GenreController::class, 'books']);
         Route::apiResource('genre', GenreController::class);
         Route::apiResource('cart', CartController::class);
+        Route::apiResource('/wishlist', WishListController::class);
     });
-    Route::get('/genre/{id}/books', [GenreController::class, 'books']);
-    Route::post('user', [UserController::class, 'store']);
+
 });
 

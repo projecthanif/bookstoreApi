@@ -60,8 +60,8 @@ class Book extends Model
         return $this->hasMany(Cart::class);
     }
 
-    public function wishList(): BelongsToMany
+    public function wishList():BelongsTo
     {
-        return $this->belongsToMany(WishList::class, 'wish_list_items', 'book_id', 'wishlist_id');
+        return $this->belongsTo(WishList::class);
     }
 }
