@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\StoreWishListRequest;
 use App\Http\Resources\V1\BookCollection;
+use App\Http\Resources\V1\BookResource;
 use App\Http\Resources\V1\WishListCollection;
 use App\Http\Resources\V1\WishListResource;
 use App\Models\Book;
@@ -23,9 +24,12 @@ class WishListController extends Controller
         $wishList = WishList::where('user_id', Auth::id())->get();
         $books = [];
         $wishList->each(function ($wishList) use (&$books) {
-            $books[] = Book::find($wishList->book_id);
-        })->collect();
-        return new BookCollection($books);
+            $books[] = [
+                'id' => $wishList->id,
+                'book' => new BookResource(Book::find($wishList->book_id)),
+            ];
+        });
+        return $books;
     }
 
     /**
