@@ -23,7 +23,7 @@ class PublisherController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new Publisher and also update a user role from normal or customer to publisher
      */
     public function store(StorePublisherRequest $request)
     {
@@ -31,7 +31,7 @@ class PublisherController extends Controller
         $data = $request->validated();
 
         $check = $user?->author?->id === null;
-        if (! $check || $user === null) {
+        if (!$check || $user === null) {
             return new JsonResponse([
                 'message' => 'already a publisher!!',
             ]);
@@ -71,6 +71,7 @@ class PublisherController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * I don't think destroy or delete would be needed
      */
     public function destroy(string $id)
     {

@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\StoreWishListRequest;
+use App\Http\Resources\V1\BookCollection;
 use App\Http\Resources\V1\WishListCollection;
+use App\Http\Resources\V1\WishListResource;
+use App\Models\Book;
 use App\Models\WishList;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,54 +21,43 @@ class WishListController extends Controller
     public function index()
     {
         $wishList = WishList::where('user_id', Auth::id())->get();
-        return new WishListCollection($wishList);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $books = [];
+        $wishList->each(function ($wishList) use (&$books) {
+            $books[] = Book::find($wishList->book_id);
+        })->collect();
+        return new BookCollection($books);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreWishListRequest $request): WishListResource
     {
-        //
+        $data = $request->validated();
+        $user = auth()->user();
+
+        $wishList = $user->wishLists()->create([
+            'book_id' => $data['book_id'],
+        ]);
+
+        return new WishListResource($wishList);
+
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function destroy(WishList $list, string $id)
     {
-        //
-    }
+        try {
+            $AuthUserId = auth()->user()->id;
+            $currentWishList = $list::find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+            if ($AuthUserId !== $currentWishList?->user_id) {
+                throw new \Exception('wrong request');
+            }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+            $res = $currentWishList->delete();
+            return new JsonResponse($res);
+        } catch (\JsonException $e) {
+            return new JsonResponse($e->getMessage());
+        }
     }
 }

@@ -25,7 +25,7 @@ class GenreController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the books gotten from $id.
      */
     public function books(Genre $genre, $id)
     {

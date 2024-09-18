@@ -6,9 +6,11 @@ use App\Enum\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\StoreUserRequest;
 use App\Http\Requests\Api\V1\UpdateUserRequest;
+use App\Http\Resources\V1\BookCollection;
 use App\Http\Resources\V1\UserCollection;
 use App\Http\Resources\V1\UserResource;
 use App\Models\User;
+use App\Models\UserBook;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -78,6 +80,8 @@ class UserController extends Controller
         if ($attempt) {
             $user = Auth::user();
             $token = '';
+
+            //Why did I do this ??
             if ($user === null) {
                 return new JsonResponse($user);
             }
@@ -105,5 +109,11 @@ class UserController extends Controller
         }
 
         return new JsonResponse($attempt);
+    }
+
+    public function userBook()
+    {
+        $user = auth()->user();
+        return new BookCollection($user->books);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\V1;
 
 use App\Enum\UserRole;
@@ -13,6 +15,7 @@ use App\Models\Author;
 use App\Models\Book;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Mockery\Exception;
 
 class AuthorController extends Controller
 {
@@ -65,12 +68,15 @@ class AuthorController extends Controller
      */
     public function update(UpdateAuthorRequest $request, Author $author)
     {
-        $author->update($request->validated());
-
-        return new AuthorResource($author);
+        try {
+            $author->update($request->validated());
+            return new AuthorResource($author);
+        } catch (\JsonException $e) {
+            return $e->getMessage();
+        }
     }
 
-    public function books($name): BookCollection
+    public function books(string $name): BookCollection
     {
         $books = Book::where(['author' => $name])->get();
         return new BookCollection($books);

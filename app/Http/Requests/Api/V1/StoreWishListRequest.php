@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class StoreWishListRequest extends FormRequest
 {
@@ -26,10 +27,10 @@ class StoreWishListRequest extends FormRequest
         ];
     }
 
-    public function prepareForValidation()
+    protected function prepareForValidation(): void
     {
-        return [
+        $this->merge([
             'book_id' => $this->bookId,
-        ];
+        ]);
     }
 }

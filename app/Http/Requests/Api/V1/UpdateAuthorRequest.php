@@ -16,7 +16,7 @@ class UpdateAuthorRequest extends FormRequest
         $segments = request()->segments();
         $id = $segments[3];
 
-        $check = ($user->author->id === (int) $id);
+        $check = ($user?->author?->id === (int) $id);
 
         return $user !== null && $check === true;
     }
