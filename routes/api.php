@@ -10,7 +10,6 @@ use App\Http\Controllers\Api\V1\WishListController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
-//    Route::get('/user/books', [UserController::class, 'userBook']);
 
     Route::post('/login', [UserController::class, 'login']);
     Route::post('user', [UserController::class, 'store']);
@@ -30,7 +29,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/genre/{id}/books', [GenreController::class, 'books']);
         Route::apiResource('genre', GenreController::class);
 
-        Route::apiResource('/wishlist', WishListController::class);
+        Route::apiResource('/wishlist', WishListController::class)->except('show');
 
     });
 

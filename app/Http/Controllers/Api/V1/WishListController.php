@@ -35,10 +35,16 @@ class WishListController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreWishListRequest $request): WishListResource
+    public function store(StoreWishListRequest $request)
     {
         $data = $request->validated();
         $user = auth()->user();
+
+        $exists = $user->wishLists()->where('book_id', $data['book_id'])?->get();
+
+        if ($exists->isNotEmpty()) {
+            return new JsonResponse('already exists in wishlist');
+        }
 
         $wishList = $user->wishLists()->create([
             'book_id' => $data['book_id'],
