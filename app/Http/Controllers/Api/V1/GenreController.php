@@ -26,6 +26,13 @@ class GenreController extends Controller
      */
     public function books(Genre $genre, $id)
     {
+        $book = $genre::find($id)?->book;
+        if ($book === null) {
+            return $this->notFoundResponse(
+                msg: 'This genre does not exist',
+            );
+        }
+
         return new BookCollection($genre::find($id)?->book);
     }
 

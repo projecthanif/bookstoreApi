@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Enum\UserRole;
+use App\Models\Genre;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,10 +22,12 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@admin.com',
-            'role' => 'superadmin',
+            'role' => UserRole::ADMIN->value,
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
         ]);
+
+        Genre::factory(10)->create();
     }
 }

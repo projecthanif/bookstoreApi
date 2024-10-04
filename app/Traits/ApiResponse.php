@@ -48,4 +48,15 @@ trait ApiResponse
             status: $statusCode
         );
     }
+
+    public function notFoundResponse(string $msg = 'Does not exist', $statusCode = 404): JsonResponse
+    {
+        return response()->json(
+            [
+                'message' => $msg,
+                'code' => $statusCode,
+            ],
+            status: $statusCode
+        );
+    }
 }

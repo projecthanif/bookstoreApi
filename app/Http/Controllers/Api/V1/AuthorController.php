@@ -49,7 +49,6 @@ class AuthorController extends Controller
 
         $mutatedAuthor = new AuthorResource($author);
 
-
         return $this->successResponse(
             msg: 'Congrats! you have  become an author',
             data: $mutatedAuthor,
@@ -72,6 +71,7 @@ class AuthorController extends Controller
     {
         try {
             $author->update($request->validated());
+
             return new AuthorResource($author);
         } catch (\JsonException $e) {
             return $e->getMessage();
@@ -80,7 +80,10 @@ class AuthorController extends Controller
 
     public function books(string $name): BookCollection
     {
-        $books = Book::where(['author' => $name])->get();
+        $books = Book::where(['author' => $name])?->get();
+        if ($books === null) {
+            return $this->notFoundResponse(msg: 'There is not book from this author', statusCode: 404);
+        }
 
         return new BookCollection($books);
     }
