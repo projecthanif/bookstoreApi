@@ -14,7 +14,6 @@ use App\Http\Resources\V1\BookCollection;
 use App\Models\Author;
 use App\Models\Book;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AuthorController extends Controller
@@ -39,7 +38,7 @@ class AuthorController extends Controller
             return $this->clientErrorResponse(msg: 'Already an author!!');
         }
 
-        $return = DB::transaction(static function () use ($validatedData, $user) {
+        $author = DB::transaction(static function () use ($validatedData, $user) {
             $user->update([
                 'role' => UserRole::Author->value,
             ]);
@@ -48,14 +47,14 @@ class AuthorController extends Controller
             return Author::create($validatedData);
         });
 
-        dd($return);
+        $mutatedAuthor = new AuthorResource($author);
+
 
         return $this->successResponse(
-            msg: "Congrats! you have become an author",
-            data: new AuthorResource($return),
+            msg: 'Congrats! you have  become an author',
+            data: $mutatedAuthor,
             statusCode: 201
         );
-
     }
 
     /**
@@ -73,7 +72,6 @@ class AuthorController extends Controller
     {
         try {
             $author->update($request->validated());
-
             return new AuthorResource($author);
         } catch (\JsonException $e) {
             return $e->getMessage();

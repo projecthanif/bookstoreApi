@@ -3,12 +3,14 @@
 namespace App\Traits;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 trait ApiResponse
 {
-    public function successResponse(string $msg, $data = null, $statusCode = 200): JsonResponse
+    public function successResponse(string $msg, JsonResource|array|null $data = null, $statusCode = 200): JsonResponse
     {
-        if ($data = null) {
+
+        if ($data === null) {
             return response()->json([
                 'message' => $msg,
                 'code' => $statusCode,

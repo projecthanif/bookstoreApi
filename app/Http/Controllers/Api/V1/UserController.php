@@ -31,6 +31,7 @@ class UserController extends Controller
     {
         $data = $request->validated();
         $data['role'] = UserRole::User->value;
+
         return new UserResource(User::create($data));
     }
 
@@ -78,7 +79,7 @@ class UserController extends Controller
             $user = Auth::user();
 
             if ($user === null) {
-                return new JsonResponse($user, status: 500);
+                return $this->serverErrorResponse('', 500);
             }
 
             $token = match ($user->role) {
@@ -98,12 +99,16 @@ class UserController extends Controller
                 ]),
             };
 
-            return new JsonResponse([
-                'token' => $token?->plainTextToken,
-            ]);
+            return $this->successResponse(
+                msg: 'Logged in successfully.',
+                data: [
+                    'token' => $token?->plainTextToken,
+                ],
+                statusCode: 200
+            );
         }
 
-        return new JsonResponse($attempt);
+        return $this->serverErrorResponse('', 500);
     }
 
     public function userBook()
