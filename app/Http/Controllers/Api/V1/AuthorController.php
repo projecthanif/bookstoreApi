@@ -35,11 +35,8 @@ class AuthorController extends Controller
         $validatedData = $request->validated();
         $user = auth()->user();
 
-        $check = $user?->author?->id === null;
-        if (! $check) {
-            return new JsonResponse([
-                'message' => 'already an author!!',
-            ]);
+        if ($user?->author?->id !== null) {
+            return $this->clientErrorResponse(msg: 'Already an author!!');
         }
 
         $return = DB::transaction(static function () use ($validatedData, $user) {
@@ -51,7 +48,13 @@ class AuthorController extends Controller
             return Author::create($validatedData);
         });
 
-        return new AuthorResource($return);
+        dd($return);
+
+        return $this->successResponse(
+            msg: "Congrats! you have become an author",
+            data: new AuthorResource($return),
+            statusCode: 201
+        );
 
     }
 
@@ -60,7 +63,6 @@ class AuthorController extends Controller
      */
     public function show(Author $author)
     {
-        $author->with('book')
         return new AuthorResource($author);
     }
 
