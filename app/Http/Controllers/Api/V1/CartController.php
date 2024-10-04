@@ -3,63 +3,74 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Api\V1\StoreCartRequest;
+use App\Http\Resources\V1\CartCollection;
+use App\Http\Resources\V1\CartResource;
+use App\Models\Cart;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+use Mockery\Exception;
 
 class CartController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
-    }
+        $user = Auth::user();
+        $carts = $user->carts()->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return new CartCollection($carts);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCartRequest $request)
     {
-        //
+        $user = Auth::user();
+        $data = $request->validated();
+        $cart = $user->carts()->where([
+            'book_id' => $data['book_id'],
+            'user_id' => $user->id,
+        ])->first();
+
+        if ($cart) {
+            $cart->increment('quantity');
+        } else {
+            $new = $user->carts()->create($data);
+            $cart = $user->carts()->find($new->id);
+        }
+
+        return new CartResource($cart);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Cart $cart)
     {
-        //
-    }
+        try {
+            $cart = Auth::user()->carts()->find($cart);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+            return new CartCollection($cart);
+        } catch (\Exception $exception) {
+            return new JsonResponse($exception->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Cart $cart)
     {
-        //
+        try {
+            $user = Auth::user();
+            if ($cart->user_id != $user->id) {
+                throw new Exception('UnAuthorized');
+            }
+
+            return new JsonResponse($cart->delete());
+        } catch (\Exception $exception) {
+            return new JsonResponse($exception->getMessage());
+        }
     }
 }

@@ -17,6 +17,7 @@ class UpdateBookRequest extends FormRequest
         $array = explode('/', $url);
         $urlArr = end($array);
         $userBookId = UserBook::find($urlArr)?->user_id ?? '';
+
         return $userBookId === $user?->id;
     }
 
@@ -27,7 +28,7 @@ class UpdateBookRequest extends FormRequest
      */
     public function rules(): array
     {
-        if($this->method() === 'PUT') {
+        if ($this->method() === 'PUT') {
             return [
                 'title' => 'required|string|max:255|min:5',
                 'description' => 'required|string',
@@ -39,6 +40,7 @@ class UpdateBookRequest extends FormRequest
                 'genre_id' => 'required|string',
             ];
         }
+
         return [
             'title' => 'sometimes|required|string|max:255|min:5',
             'description' => 'sometimes|required|string',

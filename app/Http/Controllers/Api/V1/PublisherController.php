@@ -31,7 +31,7 @@ class PublisherController extends Controller
         $data = $request->validated();
 
         $check = $user?->author?->id === null;
-        if (!$check || $user === null) {
+        if (! $check || $user === null) {
             return new JsonResponse([
                 'message' => 'already a publisher!!',
             ]);

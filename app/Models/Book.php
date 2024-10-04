@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @method static find($book_id)
@@ -63,8 +62,13 @@ class Book extends Model
         return $this->hasMany(Cart::class);
     }
 
-    public function wishList():BelongsTo
+    public function cartHistory(): HasMany
     {
-        return $this->belongsTo(WishList::class);
+        return $this->hasMany(CartHistory::class);
+    }
+
+    public function wishList(): HasMany
+    {
+        return $this->hasMany(WishList::class);
     }
 }

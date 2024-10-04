@@ -4,14 +4,14 @@ namespace App\Http\Requests\Api\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCartRequest extends FormRequest
+class UpdateCartRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,14 +22,7 @@ class StoreCartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'book_id' => 'required|integer|exists:books,id',
+            //
         ];
-    }
-
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'book_id' => $this->bookId,
-        ]);
     }
 }

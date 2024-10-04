@@ -8,10 +8,7 @@ use App\Http\Requests\Api\V1\UpdateGenreRequest;
 use App\Http\Resources\V1\BookCollection;
 use App\Http\Resources\V1\GenreCollection;
 use App\Http\Resources\V1\GenreResource;
-use App\Models\Book;
 use App\Models\Genre;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class GenreController extends Controller
@@ -31,7 +28,6 @@ class GenreController extends Controller
     {
         return new BookCollection($genre::find($id)?->book);
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -53,7 +49,6 @@ class GenreController extends Controller
         return new GenreResource($genre);
     }
 
-
     /**
      * Update the specified resource in storage.
      */
@@ -64,6 +59,7 @@ class GenreController extends Controller
             $data['name'] = strtolower($data['name']);
         }
         $genre->update($data);
+
         return new GenreResource($genre);
     }
 }

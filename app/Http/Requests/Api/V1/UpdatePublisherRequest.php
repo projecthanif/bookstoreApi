@@ -19,7 +19,7 @@ class UpdatePublisherRequest extends FormRequest
         }
 
         $arr = request()->segments();
-        $check = $user?->publisher?->id === (int)$arr[3];
+        $check = $user?->publisher?->id === (int) $arr[3];
 
         if ($check) {
             return $user !== null && $user->role === UserRole::Publisher->value;

@@ -3,9 +3,9 @@
 namespace App\Http\Requests\Api\V1;
 
 use App\Enum\UserRole;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -14,20 +14,14 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
+
+        if (!auth()->check()) return false;
+
         $user = $this->user();
-        if ($user?->role === UserRole::ADMIN->value) {
-            return $user !== null;
-        }
+        if ($user?->role === UserRole::ADMIN->value) return true;
 
         $arr = request()->segments();
-        $check = $user->id === (int) $arr[3];
-
-        if ($check) {
-            return $user !== null;
-        }
-
-        return false;
-
+        return $user->id === (int)$arr[3];
     }
 
     /**

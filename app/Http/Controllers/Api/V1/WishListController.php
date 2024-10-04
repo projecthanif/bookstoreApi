@@ -4,32 +4,24 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\StoreWishListRequest;
-use App\Http\Resources\V1\BookCollection;
-use App\Http\Resources\V1\BookResource;
-use App\Http\Resources\V1\WishListCollection;
 use App\Http\Resources\V1\WishListResource;
-use App\Models\Book;
 use App\Models\WishList;
+use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class WishListController extends Controller
 {
+    use ApiResponse;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $wishList = WishList::where('user_id', Auth::id())->get();
-        $books = [];
-        $wishList->each(function ($wishList) use (&$books) {
-            $books[] = [
-                'id' => $wishList->id,
-                'book' => new BookResource(Book::find($wishList->book_id)),
-            ];
-        });
-        return $books;
+        $wishLists = WishList::where('user_id', Auth::id())->with('book')->get();
+
+        return WishListResource::collection($wishLists);
     }
 
     /**
@@ -40,32 +32,34 @@ class WishListController extends Controller
         $data = $request->validated();
         $user = auth()->user();
 
-        $exists = $user->wishLists()->where('book_id', $data['book_id'])?->get();
+        $wishList = $user->wishLists()->create($data);
 
-        if ($exists->isNotEmpty()) {
-            return new JsonResponse('already exists in wishlist');
-        }
-
-        $wishList = $user->wishLists()->create([
-            'book_id' => $data['book_id'],
-        ]);
-
-        return new WishListResource($wishList);
-
+        return $this->successResponse(
+            msg: 'Book added to wishlist',
+            data: new WishListResource($wishList),
+            statusCode: 201,
+        );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function destroy(WishList $list, string $id)
     {
         try {
             $AuthUserId = auth()->user()->id;
-            $currentWishList = $list::find($id);
+            $currentWishList = $list::find(10);
 
-            if ($AuthUserId !== $currentWishList?->user_id) {
-                throw new \Exception('wrong request');
+            if ($AuthUserId !== $currentWishList->user_id) {
+                throw new \Exception('Wrong Request');
             }
 
-            $res = $currentWishList->delete();
-            return new JsonResponse($res);
+            $currentWishList->delete();
+
+            return $this->successResponse(
+                msg: 'Book removed from wishlist',
+                statusCode: true,
+            );
         } catch (\JsonException $e) {
             return new JsonResponse($e->getMessage());
         }

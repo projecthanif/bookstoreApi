@@ -2,19 +2,19 @@
 
 use App\Http\Controllers\Api\V1\AuthorController;
 use App\Http\Controllers\Api\V1\BookController;
+use App\Http\Controllers\Api\V1\CartController;
+use App\Http\Controllers\Api\V1\GenreController;
 use App\Http\Controllers\Api\V1\PublisherController;
 use App\Http\Controllers\Api\V1\UserController;
-use App\Http\Controllers\Api\V1\GenreController;
-use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\WishListController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
 
     Route::post('/login', [UserController::class, 'login']);
-    Route::post('user', [UserController::class, 'store']);
+    Route::post('/user', [UserController::class, 'store']);
     Route::middleware(['auth:sanctum'])->group(function () {
-        Route::apiResource('user', UserController::class)->except('post');
+        Route::apiResource('/users', UserController::class);
         /**
          * @route('userBooks') get all book from current user
          */
@@ -31,7 +31,8 @@ Route::prefix('v1')->group(function () {
 
         Route::apiResource('/wishlist', WishListController::class)->except('show');
 
+        Route::apiResource('/cart', CartController::class);
+
     });
 
 });
-

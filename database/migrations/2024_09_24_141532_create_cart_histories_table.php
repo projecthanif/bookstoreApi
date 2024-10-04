@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('wish_lists', function (Blueprint $table) {
+        Schema::create('cart_histories', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('book_id')->constrained('books')->cascadeOnDelete();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('wish_lists', function (Blueprint $table) {
-            //            $table->dropColumn('book_id');
-        });
+        Schema::dropIfExists('cart_histories');
     }
 };

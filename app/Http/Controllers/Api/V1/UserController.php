@@ -10,7 +10,6 @@ use App\Http\Resources\V1\BookCollection;
 use App\Http\Resources\V1\UserCollection;
 use App\Http\Resources\V1\UserResource;
 use App\Models\User;
-use App\Models\UserBook;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +21,7 @@ class UserController extends Controller
      */
     public function index(): UserCollection
     {
-        return new UserCollection(User::all());
+        return new UserCollection(User::paginate());
     }
 
     /**
@@ -32,7 +31,6 @@ class UserController extends Controller
     {
         $data = $request->validated();
         $data['role'] = UserRole::User->value;
-
         return new UserResource(User::create($data));
     }
 
@@ -74,16 +72,13 @@ class UserController extends Controller
             'password' => 'string',
         ]);
 
-
         $attempt = Auth::attempt($data);
 
         if ($attempt) {
             $user = Auth::user();
-            $token = '';
 
-            //Why did I do this ??
             if ($user === null) {
-                return new JsonResponse($user);
+                return new JsonResponse($user, status: 500);
             }
 
             $token = match ($user->role) {
@@ -114,6 +109,7 @@ class UserController extends Controller
     public function userBook()
     {
         $user = auth()->user();
+
         return new BookCollection($user->books);
     }
 }

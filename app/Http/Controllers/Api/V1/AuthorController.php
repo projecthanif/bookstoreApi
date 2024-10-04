@@ -14,8 +14,8 @@ use App\Http\Resources\V1\BookCollection;
 use App\Models\Author;
 use App\Models\Book;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Mockery\Exception;
 
 class AuthorController extends Controller
 {
@@ -36,7 +36,7 @@ class AuthorController extends Controller
         $user = auth()->user();
 
         $check = $user?->author?->id === null;
-        if (!$check) {
+        if (! $check) {
             return new JsonResponse([
                 'message' => 'already an author!!',
             ]);
@@ -60,6 +60,7 @@ class AuthorController extends Controller
      */
     public function show(Author $author)
     {
+        $author->with('book')
         return new AuthorResource($author);
     }
 
@@ -70,6 +71,7 @@ class AuthorController extends Controller
     {
         try {
             $author->update($request->validated());
+
             return new AuthorResource($author);
         } catch (\JsonException $e) {
             return $e->getMessage();
@@ -79,6 +81,7 @@ class AuthorController extends Controller
     public function books(string $name): BookCollection
     {
         $books = Book::where(['author' => $name])->get();
+
         return new BookCollection($books);
     }
 }

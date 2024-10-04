@@ -11,7 +11,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-
 /**
  * @property $id
  */
@@ -92,5 +91,10 @@ class User extends Authenticatable
     public function carts(): HasMany
     {
         return $this->hasMany(Cart::class);
+    }
+
+    public function cartHistory(): HasMany
+    {
+        return $this->hasMany(CartHistory::class);
     }
 }

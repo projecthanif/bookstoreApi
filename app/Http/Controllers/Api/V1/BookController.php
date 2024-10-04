@@ -25,21 +25,23 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBookRequest $request): BookResource
+    public function store(StoreBookRequest $request)
     {
-        $formData = $request->validated();
+        $apiData = $request->validated();
 
         $user = Auth::user();
 
-        $book = DB::transaction(static function () use ($formData, $user) {
-            $book = Book::create($formData);
+        $book = DB::transaction(static function () use ($apiData, $user) {
+            $book = Book::create($apiData);
 
             UserBook::create([
                 'user_id' => $user->id,
-                'book_id' => $book->id
+                'book_id' => $book->id,
             ]);
+
             return $book;
         });
+
         return new BookResource($book);
     }
 
@@ -53,9 +55,10 @@ class BookController extends Controller
 
     public function update(UpdateBookRequest $request, Book $book)
     {
-        $formData = $request->validated();
+        $apiData = $request->validated();
 
-        $book->update($formData);
+        $book->update($apiData);
+
         return new BookResource($book);
     }
 
@@ -64,8 +67,8 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-//        $res = $book->softDeletes();
-//
-//        dd($res);
+        //        $res = $book->softDeletes();
+        //
+        //        dd($res);
     }
 }

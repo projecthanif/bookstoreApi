@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('wish_lists', function (Blueprint $table) {
+        Schema::table('carts', function (Blueprint $table) {
             $table->foreignId('book_id')->constrained('books')->cascadeOnDelete();
+            $table->unsignedInteger('quantity')->default(1);
         });
     }
 
@@ -21,8 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('wish_lists', function (Blueprint $table) {
-            //            $table->dropColumn('book_id');
+        Schema::table('carts', function (Blueprint $table) {
+            //            $table->dropConstrainedForeignId('book_id');
+            $table->dropColumn('quantity');
         });
     }
 };
