@@ -33,15 +33,12 @@ class BookController extends Controller
 
         $book = DB::transaction(static function () use ($apiData, $user) {
             $book = Book::create($apiData);
-
             UserBook::create([
                 'user_id' => $user->id,
                 'book_id' => $book->id,
             ]);
-
             return $book;
         });
-
         return new BookResource($book);
     }
 

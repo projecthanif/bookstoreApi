@@ -78,13 +78,16 @@ class AuthorController extends Controller
         }
     }
 
-    public function books(string $name): BookCollection
+    public function books(string $name)
     {
-        $books = Book::where(['author' => $name])?->get();
+        $books = Book::where(['author' => $name])?->get()->first();
         if ($books === null) {
             return $this->notFoundResponse(msg: 'There is not book from this author', statusCode: 404);
         }
 
-        return new BookCollection($books);
+        return $this->successResponse(
+            msg: 'Books found',
+            data: new BookCollection($books),
+        );
     }
 }
