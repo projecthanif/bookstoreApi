@@ -3,7 +3,9 @@
 use App\Http\Controllers\Api\V1\AuthorController;
 use App\Http\Controllers\Api\V1\BookController;
 use App\Http\Controllers\Api\V1\CartController;
+use App\Http\Controllers\Api\V1\CreateNewUserController;
 use App\Http\Controllers\Api\V1\GenreController;
+use App\Http\Controllers\Api\V1\LoginUserController;
 use App\Http\Controllers\Api\V1\PublisherController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\WishListController;
@@ -11,8 +13,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
 
-    Route::post('/login', [UserController::class, 'login']);
-    Route::post('/user', [UserController::class, 'store']);
+    Route::post('/login', LoginUserController::class);
+    Route::post('/user', CreateNewUserController::class);
+
+
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::apiResource('/users', UserController::class);
         /**
