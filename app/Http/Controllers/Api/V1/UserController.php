@@ -49,7 +49,7 @@ class UserController extends Controller
         return User::find($id)?->delete();
     }
 
-    public function userBook()
+    public function userBook(): BookCollection
     {
         $user = auth()->user();
 
