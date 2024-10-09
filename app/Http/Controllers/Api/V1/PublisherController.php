@@ -3,15 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\Api\V1\MakePublisherAction;
-use App\Enum\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\StorePublisherRequest;
 use App\Http\Requests\Api\V1\UpdatePublisherRequest;
 use App\Http\Resources\V1\PublisherCollection;
 use App\Http\Resources\V1\PublisherResource;
 use App\Models\Publisher;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 
 class PublisherController extends Controller
 {
@@ -47,7 +44,7 @@ class PublisherController extends Controller
     public function update(UpdatePublisherRequest $request, Publisher $publisher)
     {
         $data = $request->validated();
-        $update = $publisher->update($data);
+        $publisher->update($data);
 
         return new PublisherResource($publisher);
     }

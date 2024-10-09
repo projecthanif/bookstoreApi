@@ -14,7 +14,7 @@ class MakePublisherAction extends ApiAction
     public function execute(array $data): JsonResponse
     {
         $user = auth()->user();
-        $check = $user?->author?->id === null;
+        $check = $user?->publisher()?->id;
 
         if (!$check) {
             return $this->clientErrorResponse(msg: 'already a publisher!!');
