@@ -31,7 +31,7 @@ class PublisherController extends Controller
         $data = $request->validated();
 
         $check = $user?->author?->id === null;
-        if (! $check || $user === null) {
+        if (!$check || $user === null) {
             return new JsonResponse([
                 'message' => 'already a publisher!!',
             ]);
@@ -47,7 +47,11 @@ class PublisherController extends Controller
             return Publisher::create($data);
         });
 
-        return new PublisherResource($return);
+        return $this->successResponse(
+            '',
+            data: new PublisherResource($return),
+            statusCode: 201
+        );
     }
 
     /**
