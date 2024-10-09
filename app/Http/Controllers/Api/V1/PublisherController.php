@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Actions\Api\V1\MakePublisherAction;
 use App\Enum\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\StorePublisherRequest;
@@ -25,33 +26,11 @@ class PublisherController extends Controller
     /**
      * Create a new Publisher and also update a user role from normal or customer to publisher
      */
-    public function store(StorePublisherRequest $request)
+    public function store(StorePublisherRequest $request, MakePublisherAction $action)
     {
         $user = auth()->user();
-        $data = $request->validated();
 
-        $check = $user?->author?->id === null;
-        if (!$check || $user === null) {
-            return new JsonResponse([
-                'message' => 'already a publisher!!',
-            ]);
-        }
-
-        $return = DB::transaction(static function () use ($data, $user) {
-            $data['user_id'] = $user->id;
-
-            $user->update([
-                'role' => UserRole::Publisher->value,
-            ]);
-
-            return Publisher::create($data);
-        });
-
-        return $this->successResponse(
-            '',
-            data: new PublisherResource($return),
-            statusCode: 201
-        );
+        return $action->execute($request->validated());
     }
 
     /**
