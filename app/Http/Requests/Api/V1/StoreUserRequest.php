@@ -11,6 +11,9 @@ class StoreUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        if (auth()->check()) {
+            return false;
+        }
         return true;
     }
 

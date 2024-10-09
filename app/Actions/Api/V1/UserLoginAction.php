@@ -9,14 +9,8 @@ use Illuminate\Http\Request;
 
 class UserLoginAction extends ApiAction
 {
-    public function execute(Request $request)
+    public function execute(array $data)
     {
-
-        $data = $request->validate([
-            'email' => 'email|exists:users,email',
-            'password' => 'string',
-        ]);
-
         $attempt = Auth::attempt($data);
 
         if ($attempt) {
@@ -33,17 +27,15 @@ class UserLoginAction extends ApiAction
                 data: [
                     'token' => $token?->plainTextToken,
                 ],
-                statusCode: 200
             );
         }
 
         return $this->serverErrorResponse('', 500);
     }
 
-    private function generateToken(User $user)
+    private function generateToken(User $user): \Laravel\Sanctum\NewAccessToken
     {
         return match ($user->role) {
-            UserRole::User->value => $user->createToken('user_token', ['user:update']),
             UserRole::ADMIN->value => $user->createToken('admin_token'),
             UserRole::Publisher->value => $user->createToken('publisher_token', [
                 'user:*',
@@ -57,6 +49,7 @@ class UserLoginAction extends ApiAction
                 'author:update',
                 'author:delete',
             ]),
+            default => $user->createToken('user_token', ['user:update']),
         };
     }
 }

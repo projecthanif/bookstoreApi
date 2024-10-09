@@ -10,6 +10,11 @@ class LoginUserController extends Controller
 {
     public function __invoke(Request $request, UserLoginAction $action)
     {
-        return $action->execute($request);
+
+        $data = $request->validate([
+            'email' => 'email|exists:users,email',
+            'password' => 'string',
+        ]);
+        return $action->execute($data);
     }
 }

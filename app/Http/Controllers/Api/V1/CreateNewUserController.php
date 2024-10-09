@@ -15,7 +15,6 @@ class CreateNewUserController extends Controller
     {
         $data = $request->validated();
         $data['role'] = UserRole::User->value;
-
         return new UserResource(User::create($data));
     }
 }

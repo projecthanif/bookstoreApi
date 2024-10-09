@@ -23,6 +23,7 @@ Route::prefix('v1')->group(function () {
          * @route('userBooks') get all book from current user
          */
         Route::get('/userBooks', [UserController::class, 'userBook']);
+
         Route::apiResource('publisher', PublisherController::class);
 
         Route::apiResource('author', AuthorController::class);
@@ -40,3 +41,4 @@ Route::prefix('v1')->group(function () {
     });
 
 });
+
