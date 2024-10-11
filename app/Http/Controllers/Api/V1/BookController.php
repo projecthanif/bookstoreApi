@@ -47,7 +47,11 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        return new BookResource($book);
+        try {
+            return $this->successResponse('', new BookResource($book));
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function update(UpdateBookRequest $request, Book $book)
