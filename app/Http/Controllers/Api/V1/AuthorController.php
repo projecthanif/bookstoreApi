@@ -72,17 +72,21 @@ class AuthorController extends Controller
         try {
             $author->update($request->validated());
 
-            return new AuthorResource($author);
+            return $this->successResponse(
+                'Author Info updated',
+                data: new AuthorResource($author),
+            );
         } catch (\JsonException $e) {
             return $e->getMessage();
         }
     }
 
-    public function books(string $name)
+    public function books(string $name): JsonResponse
     {
         $books = Book::where(['author' => $name])?->get()->first();
-        if ($books === null) {
-            return $this->notFoundResponse(msg: 'There is not book from this author', statusCode: 404);
+
+        if (!$books) {
+            return $this->notFoundResponse(msg: 'There is not book from this author');
         }
 
         return $this->successResponse(
