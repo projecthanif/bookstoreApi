@@ -16,7 +16,6 @@ Route::prefix('v1')->group(function () {
     Route::post('/login', LoginUserController::class);
     Route::post('/user', CreateNewUserController::class);
 
-
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::apiResource('/users', UserController::class)->except('store');
         /**
@@ -41,4 +40,3 @@ Route::prefix('v1')->group(function () {
     });
 
 });
-

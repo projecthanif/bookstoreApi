@@ -19,7 +19,7 @@ class StoreBookAction extends ApiAction
 
         $response = Gate::inspect('create', Book::class);
 
-        if(!$response->allowed()){
+        if (! $response->allowed()) {
             return $this->clientErrorResponse('Unauthorized', 401);
         }
 
@@ -29,9 +29,10 @@ class StoreBookAction extends ApiAction
                 'user_id' => $user->id,
                 'book_id' => $book->id,
             ]);
+
             return $book;
         });
+
         return new BookResource($book);
     }
-
 }

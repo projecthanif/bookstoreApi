@@ -28,7 +28,7 @@ class GenreController extends Controller
     {
         $book = $genre::find($id)?->book;
 
-        if (!$book) {
+        if (! $book) {
             return $this->notFoundResponse(
                 msg: 'Book with this genre does not exist',
             );

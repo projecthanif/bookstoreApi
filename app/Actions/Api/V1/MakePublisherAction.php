@@ -10,13 +10,12 @@ use Illuminate\Support\Facades\DB;
 
 class MakePublisherAction extends ApiAction
 {
-
     public function execute(array $data): JsonResponse
     {
         $user = auth()->user();
         $check = $user?->publisher()?->id;
 
-        if (!$check) {
+        if (! $check) {
             return $this->clientErrorResponse(msg: 'already a publisher!!');
         }
 

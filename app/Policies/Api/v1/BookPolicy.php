@@ -29,7 +29,9 @@ class BookPolicy
      */
     public function create(User $user): bool
     {
-        if (!auth()->check()) return false;
+        if (! auth()->check()) {
+            return false;
+        }
 
         $user = auth()->user();
 

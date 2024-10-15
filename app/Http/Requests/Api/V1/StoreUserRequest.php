@@ -14,6 +14,7 @@ class StoreUserRequest extends FormRequest
         if (auth()->check()) {
             return false;
         }
+
         return true;
     }
 

@@ -9,10 +9,6 @@ use App\Http\Requests\Api\V1\UpdateBookRequest;
 use App\Http\Resources\V1\BookCollection;
 use App\Http\Resources\V1\BookResource;
 use App\Models\Book;
-use App\Models\UserBook;
-use App\Policies\Api\v1\BookPolicy;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {

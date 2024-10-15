@@ -5,7 +5,6 @@ namespace App\Actions\Api\V1;
 use App\Enum\UserRole;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 
 class UserLoginAction extends ApiAction
 {

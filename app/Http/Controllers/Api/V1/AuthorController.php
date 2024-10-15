@@ -85,7 +85,7 @@ class AuthorController extends Controller
     {
         $books = Book::where(['author' => $name])?->get()->first();
 
-        if (!$books) {
+        if (! $books) {
             return $this->notFoundResponse(msg: 'There is not book from this author');
         }
 

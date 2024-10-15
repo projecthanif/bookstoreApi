@@ -60,7 +60,6 @@ trait ApiResponse
         );
     }
 
-
     public function exceptionMessage(string $msg, $statusCode = 404): JsonResponse
     {
         return response()->json(
