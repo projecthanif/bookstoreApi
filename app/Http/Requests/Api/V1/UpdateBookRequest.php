@@ -17,6 +17,7 @@ class UpdateBookRequest extends FormRequest
         $array = explode('/', $url);
         $urlArr = end($array);
         $userBookId = UserBook::find($urlArr)?->user_id ?? '';
+        dd($this->bookId);
 
         return $userBookId === $user?->id;
     }

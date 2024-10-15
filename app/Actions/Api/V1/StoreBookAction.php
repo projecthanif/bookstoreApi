@@ -6,7 +6,6 @@ use App\Http\Resources\V1\BookResource;
 use App\Models\Book;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class StoreBookAction extends ApiAction
