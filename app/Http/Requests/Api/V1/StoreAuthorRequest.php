@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Enum\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreAuthorRequest extends FormRequest
@@ -12,8 +13,7 @@ class StoreAuthorRequest extends FormRequest
     public function authorize(): bool
     {
         $user = $this->user();
-
-        return $user !== null && $user->author?->id === null;
+        return $user !== null && $user->role !== UserRole::Author->value;
     }
 
     /**

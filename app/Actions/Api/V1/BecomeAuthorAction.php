@@ -4,7 +4,6 @@ namespace App\Actions\Api\V1;
 
 use App\Enum\UserRole;
 use App\Http\Resources\V1\AuthorResource;
-use App\Models\Author;
 use Illuminate\Support\Facades\DB;
 
 class BecomeAuthorAction extends ApiAction
@@ -13,7 +12,7 @@ class BecomeAuthorAction extends ApiAction
     {
         $user = auth()->user();
 
-        if ($user?->author?->id !== null) {
+        if ($user->role === UserRole::Author->value) {
             return $this->clientErrorResponse(msg: 'Already an author!!');
         }
 
@@ -21,9 +20,8 @@ class BecomeAuthorAction extends ApiAction
             $user->update([
                 'role' => UserRole::Author->value,
             ]);
-            $validatedData['user_id'] = $user->id;
 
-            return Author::create($validatedData);
+            return $user->author()->create($validatedData);
         });
 
         return $this->successResponse(

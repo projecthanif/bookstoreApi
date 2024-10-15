@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Api\V1;
 
-use App\Models\UserBook;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateBookRequest extends FormRequest
@@ -12,14 +11,7 @@ class UpdateBookRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $user = auth()->user();
-        $url = url()->current();
-        $array = explode('/', $url);
-        $urlArr = end($array);
-        $userBookId = UserBook::find($urlArr)?->user_id ?? '';
-        dd($this->bookId);
-
-        return $userBookId === $user?->id;
+        return auth()->user()->id === $this->route('book')->user_id;
     }
 
     /**
