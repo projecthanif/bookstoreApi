@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Actions\Api\V1\StoreBookAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\StoreBookRequest;
 use App\Http\Requests\Api\V1\UpdateBookRequest;
@@ -9,6 +10,7 @@ use App\Http\Resources\V1\BookCollection;
 use App\Http\Resources\V1\BookResource;
 use App\Models\Book;
 use App\Models\UserBook;
+use App\Policies\Api\v1\BookPolicy;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -25,21 +27,9 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBookRequest $request)
+    public function store(StoreBookRequest $request, StoreBookAction $action)
     {
-        $apiData = $request->validated();
-
-        $user = Auth::user();
-
-        $book = DB::transaction(static function () use ($apiData, $user) {
-            $book = Book::create($apiData);
-            UserBook::create([
-                'user_id' => $user->id,
-                'book_id' => $book->id,
-            ]);
-            return $book;
-        });
-        return new BookResource($book);
+        return $action->execute($request->validated());
     }
 
     /**
