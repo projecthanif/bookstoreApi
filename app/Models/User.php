@@ -79,14 +79,9 @@ class User extends Authenticatable
         return $this->hasMany(Review::class);
     }
 
-    public function books(): BelongsToMany
+    public function book(): HasMany
     {
-        return $this->belongsToMany(
-            Book::class,
-            'user_books',
-            'user_id',
-            'book_id'
-        );
+        return $this->hasMany(Book::class);
     }
 
     public function carts(): HasMany

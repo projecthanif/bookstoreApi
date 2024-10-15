@@ -4,7 +4,6 @@ namespace App\Actions\Api\V1;
 
 use App\Http\Resources\V1\BookResource;
 use App\Models\Book;
-use App\Models\UserBook;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,19 +18,11 @@ class StoreBookAction extends ApiAction
 
         $response = Gate::inspect('create', Book::class);
 
-        if (! $response->allowed()) {
+        if (!$response->allowed()) {
             return $this->clientErrorResponse('Unauthorized', 401);
         }
 
-        $book = DB::transaction(static function () use ($apiData, $user) {
-            $book = Book::create($apiData);
-            UserBook::create([
-                'user_id' => $user->id,
-                'book_id' => $book->id,
-            ]);
-
-            return $book;
-        });
+        $book = $user->book()->create($apiData);
 
         return new BookResource($book);
     }

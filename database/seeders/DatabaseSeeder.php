@@ -17,16 +17,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'admin',
-            'email' => 'admin@admin.com',
-            'role' => UserRole::ADMIN->value,
-            'email_verified_at' => now(),
-            'password' => Hash::make('password'),
-            'remember_token' => Str::random(10),
-        ]);
+//        User::factory(10)->create();
+//
+//        User::factory()->create([
+//            'name' => 'admin',
+//            'email' => 'admin@admin.com',
+//            'role' => UserRole::ADMIN->value,
+//            'email_verified_at' => now(),
+//            'password' => Hash::make('password'),
+//            'remember_token' => Str::random(10),
+//        ]);
 
         Genre::factory(10)->create();
     }
