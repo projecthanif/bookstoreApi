@@ -12,10 +12,11 @@ class UpdateAuthorRequest extends FormRequest
     public function authorize(): bool
     {
         $user = $this->user();
-        
+
         $segments = request()->segments();
         $id = $segments[3];
-        return ($user?->author?->id === (int) $id);
+
+        return $user?->author?->id === (int) $id;
     }
 
     /**

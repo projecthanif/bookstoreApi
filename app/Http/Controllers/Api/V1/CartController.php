@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Actions\Api\V1\CreateCartAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\StoreCartRequest;
 use App\Http\Resources\V1\CartCollection;
-use App\Http\Resources\V1\CartResource;
 use App\Models\Cart;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +13,7 @@ use Mockery\Exception;
 
 class CartController extends Controller
 {
-    public function index()
+    public function index(): CartCollection
     {
         $user = Auth::user();
         $carts = $user->carts()->get();
@@ -21,31 +21,14 @@ class CartController extends Controller
         return new CartCollection($carts);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreCartRequest $request)
+    public function store(StoreCartRequest $request, CreateCartAction $action)
     {
-        $user = Auth::user();
         $data = $request->validated();
-        $cart = $user->carts()->where([
-            'book_id' => $data['book_id'],
-            'user_id' => $user->id,
-        ])->first();
 
-        if ($cart) {
-            $cart->increment('quantity');
-        } else {
-            $new = $user->carts()->create($data);
-            $cart = $user->carts()->find($new->id);
-        }
-
-        return new CartResource($cart);
+        return $action->execute($data);
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(Cart $cart)
     {
         try {
@@ -57,9 +40,6 @@ class CartController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Cart $cart)
     {
         try {

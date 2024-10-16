@@ -17,7 +17,7 @@ class StoreBookAction extends ApiAction
 
         $response = Gate::inspect('create', Book::class);
 
-        if (!$response->allowed()) {
+        if (! $response->allowed()) {
             return $this->clientErrorResponse('Unauthorized', 401);
         }
 
