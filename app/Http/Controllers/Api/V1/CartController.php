@@ -28,7 +28,6 @@ class CartController extends Controller
         return $action->execute($data);
     }
 
-
     public function show(Cart $cart)
     {
         try {

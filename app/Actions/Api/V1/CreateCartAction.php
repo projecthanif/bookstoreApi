@@ -15,7 +15,6 @@ class CreateCartAction
             'user_id' => $user->id,
         ])->first();
 
-
         if ($cart) {
             $cart->increment('quantity');
         } else {
