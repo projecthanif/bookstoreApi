@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use Illuminate\Container\Attributes\CurrentUser;
+use Illuminate\Container\Attributes\RouteParameter;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateAuthorRequest extends FormRequest
@@ -9,14 +11,12 @@ class UpdateAuthorRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(
+        #[CurrentUser]              $user,
+        #[RouteParameter('author')] $author
+    ): bool
     {
-        $user = $this->user();
-
-        $segments = request()->segments();
-        $id = $segments[3];
-
-        return $user?->author?->id === (int) $id;
+        return $user->id === $author->user_id;
     }
 
     /**
