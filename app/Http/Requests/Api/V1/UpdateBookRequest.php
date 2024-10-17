@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use Illuminate\Container\Attributes\CurrentUser;
+use Illuminate\Container\Attributes\RouteParameter;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateBookRequest extends FormRequest
@@ -9,9 +11,12 @@ class UpdateBookRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(
+        #[CurrentUser] $user,
+        #[RouteParameter('book')] $book
+    ): bool
     {
-        return auth()->user()->id === $this->route('book')->user_id;
+        return $user->id === $book->user_id;
     }
 
     /**

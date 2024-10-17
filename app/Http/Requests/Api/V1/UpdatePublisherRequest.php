@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Api\V1;
 
 use App\Enum\UserRole;
+use Illuminate\Container\Attributes\CurrentUser;
+use Illuminate\Container\Attributes\RouteParameter;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 
@@ -11,21 +13,12 @@ class UpdatePublisherRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(
+        #[CurrentUser]                 $user,
+        #[RouteParameter('publisher')] $publisher
+    ): bool
     {
-        $user = $this->user();
-        if ($user?->role === UserRole::ADMIN->value) {
-            return $user !== null;
-        }
-
-        $arr = request()->segments();
-        $check = $user?->publisher?->id === (int) $arr[3];
-
-        if ($check) {
-            return $user !== null && $user->role === UserRole::Publisher->value;
-        }
-
-        return false;
+        return $user->id === $publisher->user_id;
     }
 
     /**
