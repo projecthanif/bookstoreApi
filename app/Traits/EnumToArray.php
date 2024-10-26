@@ -16,6 +16,6 @@ trait EnumToArray
 
     public static function toArray(): array
     {
-        return array_combine(self::name(), self::value());
+        return array_combine(self::value(), self::value());
     }
 }

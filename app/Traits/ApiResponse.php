@@ -9,20 +9,17 @@ trait ApiResponse
 {
     public function successResponse(string $msg, JsonResource|array|null $data = null, $statusCode = 200): JsonResponse
     {
+        $res = [
+            'message' => $msg,
+            'code' => $statusCode,
+        ];
 
-        if ($data === null) {
-            return response()->json([
-                'message' => $msg,
-                'code' => $statusCode,
-            ]);
+        if ($data) {
+            $res['data'] = $data;
         }
 
         return response()->json(
-            [
-                'message' => $msg,
-                'data' => $data,
-                'code' => $statusCode,
-            ],
+            $res,
             status: $statusCode
         );
     }

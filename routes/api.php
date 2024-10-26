@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\CreateNewUserController;
 use App\Http\Controllers\Api\V1\GenreController;
 use App\Http\Controllers\Api\V1\LoginUserController;
 use App\Http\Controllers\Api\V1\PublisherController;
+use App\Http\Controllers\Api\V1\ReviewController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\WishListController;
 use Illuminate\Support\Facades\Route;
@@ -36,7 +37,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/wishlist', WishListController::class)->except('show');
 
         Route::apiResource('/cart', CartController::class);
-
+        Route::apiResource('/review', ReviewController::class);
     });
 
 });

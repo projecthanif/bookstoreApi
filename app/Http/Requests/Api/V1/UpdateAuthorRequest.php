@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Models\Author;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Container\Attributes\RouteParameter;
 use Illuminate\Foundation\Http\FormRequest;
@@ -13,7 +14,7 @@ class UpdateAuthorRequest extends FormRequest
      */
     public function authorize(
         #[CurrentUser]              $user,
-        #[RouteParameter('author')] $author
+        #[RouteParameter('author')] Author $author
     ): bool
     {
         return $user->id === $author->user_id;

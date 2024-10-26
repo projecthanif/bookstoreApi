@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Models\Review;
+use Illuminate\Container\Attributes\CurrentUser;
+use Illuminate\Container\Attributes\RouteParameter;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateReviewRequest extends FormRequest
@@ -9,9 +12,12 @@ class UpdateReviewRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(
+        #[CurrentUser] $authenticatedUser,
+        #[RouteParameter('review')] Review $reviewId
+    ): bool
     {
-        return false;
+        return $authenticatedUser->id === $reviewId->user_id;
     }
 
     /**
@@ -22,7 +28,15 @@ class UpdateReviewRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'rating' => 'sometimes|required|integer|between:1,5',
+            'review_text' => 'sometimes|required|string',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'review_text' => $this->reviewText
+        ]);
     }
 }

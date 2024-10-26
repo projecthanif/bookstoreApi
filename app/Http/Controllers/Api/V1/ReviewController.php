@@ -2,48 +2,30 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Actions\Api\V1\MakeReviewAction;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Api\V1\StoreReviewRequest;
+use App\Http\Requests\Api\V1\UpdateReviewRequest;
+use App\Models\Review;
 
 class ReviewController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreReviewRequest $request, MakeReviewAction $action)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        $formData = $request->validated();
+        $formData['user_id'] = auth()->id();
+        return $action->exceute($formData);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateReviewRequest $request, Review $review)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $review->update($request->validated());
+        return $this->successResponse('Review updated successfully');
     }
 }
