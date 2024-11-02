@@ -24,7 +24,7 @@ class UserLoginAction extends ApiAction
             return $this->successResponse(
                 msg: 'Logged in successfully.',
                 data: [
-                    'token' => $token?->plainTextToken,
+                    'token' => $token->plainTextToken,
                 ],
             );
         }

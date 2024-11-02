@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
+            $table->foreignId('book_id')->constrained('books')->restrictOnDelete();
             $table->string('status');
-            $table->double('total_amount');
+            $table->double('price');
             $table->timestamps();
         });
     }

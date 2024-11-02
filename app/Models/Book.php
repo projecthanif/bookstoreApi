@@ -37,14 +37,9 @@ class Book extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function order(): BelongsToMany
+    public function order(): BelongsTo
     {
-        return $this->belongsToMany(
-            Order::class,
-            'order_items',
-            'book_id',
-            'order_id'
-        );
+        return $this->belongsTo(Order::class);
     }
 
     public function reviews(): HasMany
