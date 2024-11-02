@@ -25,9 +25,22 @@ class StoreAuthorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:100',
+            'name' => 'required|string|max:100|unique:authors,name',
             'biography' => 'required|string',
             'dob' => 'required|date',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Name is required.',
+            'name.string' => 'Name must be a string.',
+            'name.unique' => 'Pen name already taken.',
+            'biography.required' => 'Biography is required.',
+            'biography.string' => 'Biography must be a string.',
+            'dob.required' => 'Date of Birth is required.',
+            'dob.date' => 'Date of Birth must be a string.',
         ];
     }
 }

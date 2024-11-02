@@ -62,7 +62,7 @@ class AuthorController extends Controller
 
     public function books(string $name): JsonResponse
     {
-        $books = Book::where(['author' => $name])?->get()->first();
+        $books = Book::where(['author' => $name])?->get();
 
         if (! $books) {
             return $this->notFoundResponse(msg: 'There is not book from this author');

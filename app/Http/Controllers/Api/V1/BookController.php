@@ -34,14 +34,12 @@ class BookController extends Controller
     public function show(string $id)
     {
         $book = Book::find($id);
-        $bookWithReview = $book->with('reviews')->get();
+        if(!$book){
+            return $this->notFoundResponse();
+        }
+        $bookWithReview = $book->with('reviews')->get()->first();
 
-//        dd($bookWithReview);
         $data =  new BookResource($bookWithReview);
-//        $data = [
-//            'book' => $data[0],
-//        ];
-//        $data = new BookResource($book);
         return $this->successResponse('', $data);
     }
 
