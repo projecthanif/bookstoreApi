@@ -31,13 +31,18 @@ class BookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Book $book)
+    public function show(string $id)
     {
-        try {
-            return $this->successResponse('', new BookResource($book));
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
+        $book = Book::find($id);
+        $bookWithReview = $book->with('reviews')->get();
+
+//        dd($bookWithReview);
+        $data =  new BookResource($bookWithReview);
+//        $data = [
+//            'book' => $data[0],
+//        ];
+//        $data = new BookResource($book);
+        return $this->successResponse('', $data);
     }
 
     public function update(UpdateBookRequest $request, Book $book)

@@ -10,9 +10,7 @@ use App\Models\Review;
 
 class ReviewController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(StoreReviewRequest $request, MakeReviewAction $action)
     {
         $formData = $request->validated();
@@ -20,9 +18,7 @@ class ReviewController extends Controller
         return $action->exceute($formData);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(UpdateReviewRequest $request, Review $review)
     {
         $review->update($request->validated());

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1;
 
+use App\Http\Resources\Api\V1\ReviewResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -12,6 +13,7 @@ class BookResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+
     public function toArray(Request $request): array
     {
         return [
@@ -25,6 +27,7 @@ class BookResource extends JsonResource
             'quantity' => $this->quantity,
             'publisherId' => $this->publisher_id,
             'genreId' => $this->genre_id,
+            'reviews' =>  ReviewResource::collection($this->whenLoaded('reviews')),
         ];
     }
 }
